@@ -13,14 +13,14 @@ namespace ReadyTeachApi.Services
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public void Add(string sessionKey, int sessionValue)
+        public async Task Add(string sessionKey, int? sessionValue)
         {
-            _httpContextAccessor.HttpContext.Session.SetInt32(sessionKey, sessionValue);
+            await Task.Run(() => _httpContextAccessor.HttpContext.Session.SetInt32(sessionKey, sessionValue ?? 0));
         }
 
-        public int? Get(string sessionKey)
+        public async Task<int?> Get(string sessionKey)
         {
-            return _httpContextAccessor.HttpContext.Session.GetInt32(sessionKey);
+            return await Task.FromResult(_httpContextAccessor.HttpContext.Session.GetInt32(sessionKey));
         }
     }
 }

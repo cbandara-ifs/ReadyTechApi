@@ -16,9 +16,9 @@ namespace ReadyTeachApi.Controllers
             _coffeeService = coffeeService;
         }
         [HttpGet]
-        public IActionResult getBrewCoffee()
+        public async Task<IActionResult> getBrewCoffee()
         {
-            var coffeeModel = _coffeeService.BrewCoffee();
+            var coffeeModel = await _coffeeService.BrewCoffee();
 
             if (DateTime.Today.Month == 4 && DateTime.Today.Day == 1)
             {

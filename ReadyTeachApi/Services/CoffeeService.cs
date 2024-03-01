@@ -16,7 +16,7 @@ namespace ReadyTeachApi.Services
             _serviceDate = serviceDate;
         }
 
-        public CoffeeModel BrewCoffee()
+        public async Task<CoffeeModel> BrewCoffee()
         {
             DateTime today = _serviceDate.GetDate();
 
@@ -25,9 +25,9 @@ namespace ReadyTeachApi.Services
                 return null;
             }
 
-            int sessionCount = _sessionHelper.Get("BreCoffeeSessionCount") ?? 0;
+            int? sessionCount = await _sessionHelper.Get("BreCoffeeSessionCount") ?? 0;
             sessionCount++;
-            _sessionHelper.Add("BreCoffeeSessionCount", sessionCount);
+            await _sessionHelper.Add("BreCoffeeSessionCount", sessionCount);
 
             if (sessionCount % 5 == 0) 
             {
@@ -37,7 +37,7 @@ namespace ReadyTeachApi.Services
             return new CoffeeModel
             {
                 Message = "Your piping hot coffee is ready",
-                Prepared = "2021-02-03T11:56:24+0900"
+                Prepared = $"{today}"
             };
         }
     }

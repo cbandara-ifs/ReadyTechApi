@@ -24,20 +24,22 @@ namespace ReadyTeachApi.Test
             _mockServiceDate = new Mock<IServiceDate>();
         }
         [Fact]
-        public void ShouldReturnStatusMessage()
+        public async Task ShouldReturnStatusMessage()
         {
+            DateTime today = DateTime.Now;
+
             Coffee response = new Coffee
             {
                 Message = "Your piping hot coffee is ready",
-                Prepared = "2021-02-03T11:56:24+0900"
+                Prepared = $"{today}"
             };
 
-            _mockSessionHelper.Setup(s => s.Get("BreCoffeeSessionCount")).Returns(1);
-            _mockServiceDate.Setup(s => s.GetDate()).Returns(DateTime.Now);
+            _mockSessionHelper.Setup(s => s.Get("BreCoffeeSessionCount")).ReturnsAsync(1);
+            _mockServiceDate.Setup(s => s.GetDate()).Returns(today);
 
             CoffeeService processor = new CoffeeService(_mockSessionHelper.Object, _mockServiceDate.Object);
 
-            CoffeeModel result = processor.BrewCoffee();
+            CoffeeModel result = await processor.BrewCoffee();
 
             Assert.NotNull(result);
 
@@ -46,29 +48,29 @@ namespace ReadyTeachApi.Test
         }
 
         [Fact]
-        public void ShouldReturnServiceUnavailable()
+        public async Task ShouldReturnServiceUnavailable()
         {
-            _mockSessionHelper.Setup(s => s.Get("BreCoffeeSessionCount")).Returns(4);
+            _mockSessionHelper.Setup(s => s.Get("BreCoffeeSessionCount")).ReturnsAsync(4);
             _mockServiceDate.Setup(s => s.GetDate()).Returns(DateTime.Now);
 
             CoffeeService processor = new CoffeeService(_mockSessionHelper.Object, _mockServiceDate.Object);
 
-            CoffeeModel result = processor.BrewCoffee();
+            CoffeeModel result = await processor.BrewCoffee();
 
             Assert.Null(result);
         }
 
         [Fact]
-        public void shouldReturnEmptyOnAprilFirst()
+        public async Task shouldReturnEmptyOnAprilFirst()
         {
             DateTime today = new DateTime(2024, 04, 01);
 
-            _mockSessionHelper.Setup(s => s.Get("BreCoffeeSessionCount")).Returns(1);
+            _mockSessionHelper.Setup(s => s.Get("BreCoffeeSessionCount")).ReturnsAsync(1);
             _mockServiceDate.Setup(s => s.GetDate()).Returns(today);
 
             CoffeeService processor = new CoffeeService(_mockSessionHelper.Object, _mockServiceDate.Object);
 
-            CoffeeModel result = processor.BrewCoffee();
+            CoffeeModel result = await processor.BrewCoffee();
 
             Assert.Null(result);
         }
