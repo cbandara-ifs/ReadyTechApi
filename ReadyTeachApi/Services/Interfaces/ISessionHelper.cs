@@ -2,8 +2,8 @@
 {
     public interface ISessionHelper
     {
-        public void Add(string sessionKey, int sessionValue);
+        public Task Add(string sessionKey, int? sessionValue);
 
-        public int? Get(string sessionKey);
+        public Task<int?> Get(string sessionKey);
     }
 }

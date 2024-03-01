@@ -4,6 +4,6 @@ namespace ReadyTeachApi.Services.Interfaces
 {
     public interface ICoffeeService
     {
-        public CoffeeModel BrewCoffee();
+        public Task<CoffeeModel> BrewCoffee();
     }
 }
